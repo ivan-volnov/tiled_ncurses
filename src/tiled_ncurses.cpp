@@ -23,7 +23,7 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 */
 
-#include "tiled_ncurses.h"
+#include <tiled_ncurses/tiled_ncurses.hpp>
 #include <ncurses.h>
 #include <locale.h>
 #include <mutex>
