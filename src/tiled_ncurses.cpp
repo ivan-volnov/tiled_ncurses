@@ -344,6 +344,50 @@ std::string VerticalListMenu::get_item_string() const
 
 
 
+void InputLine::paint() const
+{
+    wclear(win);
+    wmove(win, 0, 0);
+    const auto txt = get_text();
+    waddnstr(win, txt.c_str(), txt.size());
+    wnoutrefresh(win);
+}
+
+uint8_t InputLine::process_key(char32_t ch, bool is_symbol)
+{
+    if (ch == 10 && is_symbol) { // enter
+        close();
+    }
+    else if (ch == 27 && is_symbol) { // escape
+        cancelled = true;
+        close();
+    }
+    else if (ch == 127 && is_symbol) { // backspace
+        if (!text.empty()) {
+            text.erase(text.size() - 1);
+        }
+    }
+    else if (is_symbol) {
+        text.append(1, ch);
+    }
+    else {
+        return 0;
+    }
+    return PleasePaint;
+}
+
+bool InputLine::is_cancelled() const
+{
+    return cancelled;
+}
+
+std::string InputLine::get_text() const
+{
+    return string_essentials::utf8::encode(text);
+}
+
+
+
 Screen::Screen()
 {
     setlocale(LC_ALL, "en_US.UTF-8");

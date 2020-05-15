@@ -365,6 +365,22 @@ private:
 
 
 
+class InputLine : public CursesWindow
+{
+public:
+    void paint() const override;
+    uint8_t process_key(char32_t ch, bool is_symbol) override;
+
+    bool is_cancelled() const;
+    std::string get_text() const;
+
+private:
+    std::u32string text;
+    bool cancelled = false;
+};
+
+
+
 class Screen : public Window
 {
 public:
