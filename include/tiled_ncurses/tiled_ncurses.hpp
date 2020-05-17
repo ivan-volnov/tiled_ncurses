@@ -411,6 +411,23 @@ private:
 
 
 
+class ProgressBar : public CursesWindow
+{
+public:
+    ProgressBar(const std::string &color_fg, const char *fg = "◼", const char *bg = " ");
+
+    void paint() const override;
+
+    void set_progres(double value);
+
+private:
+    double progress = 0;
+    uint32_t color_fg = 0;
+    const char *symbol_fg, *symbol_bg;
+};
+
+
+
 class Screen : public Window
 {
 public:

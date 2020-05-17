@@ -398,6 +398,38 @@ std::string InputLine::get_text() const
 
 
 
+ProgressBar::ProgressBar(const std::string &color_fg, const char *fg, const char *bg) :
+    CursesWindow(1), color_fg(internal::instance().get_color(color_fg)), symbol_fg(fg), symbol_bg(bg)
+{
+
+}
+
+void ProgressBar::paint() const
+{
+    wclear(win);
+    const auto len_fg = strlen(symbol_fg);
+    const auto len_bg = strlen(symbol_bg);
+    const uint16_t progress_width = get_width() * progress / 100;
+    for (uint16_t i = 0; i < get_width(); ++i) {
+        if (i < progress_width) {
+            wattron(win, color_fg);
+            waddnstr(win, symbol_fg, len_fg);
+            wattroff(win, color_fg);
+        }
+        else {
+            waddnstr(win, symbol_bg, len_bg);
+        }
+    }
+    wnoutrefresh(win);
+}
+
+void ProgressBar::set_progres(double value)
+{
+    progress = value;
+}
+
+
+
 Screen::Screen()
 {
     setlocale(LC_ALL, "en_US.UTF-8");
