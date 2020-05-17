@@ -78,6 +78,7 @@ public:
     virtual void resize(uint16_t height, uint16_t width);
     virtual void move(uint16_t y, uint16_t x);
     virtual void paint() const;
+    virtual bool requires_cursor() const;
 
     virtual uint8_t process_key(char32_t ch, bool is_symbol);
     virtual void close();
@@ -136,8 +137,8 @@ template <typename T>
 class Border : public T
 {
 public:
-    explicit Border(uint16_t border_h = 1, uint16_t border_w = 1) :
-        border_h(border_h), border_w(border_w)
+    explicit Border(uint16_t border_h = 1, uint16_t border_w = 1, uint16_t height = 0, uint16_t width = 0) :
+        T(height, width), border_h(border_h), border_w(border_w)
     {
 
     }
@@ -169,6 +170,14 @@ public:
         if (window) {
             window->paint();
         }
+    }
+
+    bool requires_cursor() const override
+    {
+        if (window) {
+            return window->requires_cursor();
+        }
+        return T::requires_cursor();
     }
 
     uint8_t process_key(char32_t ch, bool is_symbol) override
@@ -243,8 +252,27 @@ public:
     void paint() const override
     {
         for (auto it = tiles.begin(); it != tiles.end();) {
-            (it++)->first->paint();
+            auto window = (it++)->first;
+            if (!window->requires_cursor()) {
+                window->paint();
+            }
         }
+        for (auto it = tiles.begin(); it != tiles.end();) {
+            auto window = (it++)->first;
+            if (window->requires_cursor()) {
+                window->paint();
+            }
+        }
+    }
+
+    bool requires_cursor() const override
+    {
+        for (auto it = tiles.begin(); it != tiles.end();) {
+            if ((it++)->first->requires_cursor()) {
+                return true;
+            }
+        }
+        return Window::requires_cursor();
     }
 
     uint8_t process_key(char32_t ch, bool is_symbol) override
@@ -369,6 +397,8 @@ class InputLine : public CursesWindow
 {
 public:
     void paint() const override;
+    bool requires_cursor() const override;
+
     uint8_t process_key(char32_t ch, bool is_symbol) override;
 
     bool is_cancelled() const;

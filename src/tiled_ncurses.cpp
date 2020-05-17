@@ -134,6 +134,11 @@ void Window::paint() const
 
 }
 
+bool Window::requires_cursor() const
+{
+    return false;
+}
+
 uint8_t Window::process_key(char32_t, bool)
 {
     return 0;
@@ -351,6 +356,11 @@ void InputLine::paint() const
     const auto txt = get_text();
     waddnstr(win, txt.c_str(), txt.size());
     wnoutrefresh(win);
+}
+
+bool InputLine::requires_cursor() const
+{
+    return true;
 }
 
 uint8_t InputLine::process_key(char32_t ch, bool is_symbol)
