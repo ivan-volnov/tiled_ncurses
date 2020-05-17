@@ -70,7 +70,7 @@ public:
         PleaseExitModal         = 1 << 7,
     };
 
-    Window(uint16_t height = 0, uint16_t width = 0, uint16_t y = 0, uint16_t x = 0);
+    explicit Window(uint16_t height = 0, uint16_t width = 0, uint16_t y = 0, uint16_t x = 0);
     virtual ~Window() = default;
 
     void run_modal();
@@ -112,7 +112,7 @@ private:
 class CursesWindow : public Window
 {
 public:
-    CursesWindow(uint16_t height = 0, uint16_t width = 0);
+    explicit CursesWindow(uint16_t height = 0, uint16_t width = 0);
     CursesWindow(const CursesWindow &) = delete;
     CursesWindow &operator=(const CursesWindow &) = delete;
     ~CursesWindow();
@@ -136,7 +136,7 @@ template <typename T>
 class Border : public T
 {
 public:
-    Border(uint16_t border_h = 1, uint16_t border_w = 1) :
+    explicit Border(uint16_t border_h = 1, uint16_t border_w = 1) :
         border_h(border_h), border_w(border_w)
     {
 
@@ -210,7 +210,7 @@ template<bool vertical>
 class Layout: public Window
 {
 public:
-    Layout(uint16_t splitter_size = 0) :
+    explicit Layout(uint16_t splitter_size = 0) :
         splitter_size(splitter_size)
     {
 
