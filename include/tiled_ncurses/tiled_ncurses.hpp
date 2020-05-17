@@ -396,6 +396,8 @@ private:
 class InputLine : public CursesWindow
 {
 public:
+    InputLine(const std::string &message);
+
     void paint() const override;
     bool requires_cursor() const override;
 
@@ -406,6 +408,7 @@ public:
 
 private:
     std::u32string text;
+    std::string message;
     bool cancelled = false;
 };
 

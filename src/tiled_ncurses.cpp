@@ -349,10 +349,17 @@ std::string VerticalListMenu::get_item_string() const
 
 
 
+InputLine::InputLine(const std::string &message) :
+    message(message)
+{
+    leaveok(win, false);
+}
+
 void InputLine::paint() const
 {
     wclear(win);
     wmove(win, 0, 0);
+    waddnstr(win, message.c_str(), message.size());
     const auto txt = get_text();
     waddnstr(win, txt.c_str(), txt.size());
     wnoutrefresh(win);
