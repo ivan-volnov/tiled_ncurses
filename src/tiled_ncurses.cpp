@@ -249,15 +249,22 @@ NCursesWindow *CursesWindow::get_win()
 
 
 
-VerticalListMenu::VerticalListMenu(const std::vector<std::string> &list, uint16_t scrolloff) :
-    list(list), scrolloff(scrolloff)
+VerticalListMenu::VerticalListMenu(const std::vector<std::string> &list, size_t item_idx, uint16_t scrolloff) :
+    list(list), screen_offset(item_idx), scrolloff(scrolloff)
 {
+    if (item_idx > 0) {
+        cursor_offset = std::min(static_cast<size_t>(std::numeric_limits<decltype(scrolloff)>::max()), item_idx);
+        screen_offset = item_idx - cursor_offset;
+    }
 }
 
-VerticalListMenu::VerticalListMenu(std::vector<std::string> &&list, uint16_t scrolloff) :
+VerticalListMenu::VerticalListMenu(std::vector<std::string> &&list, size_t item_idx, uint16_t scrolloff) :
     list(std::move(list)), scrolloff(scrolloff)
 {
-
+    if (item_idx > 0) {
+        cursor_offset = std::min(static_cast<size_t>(std::numeric_limits<decltype(scrolloff)>::max()), item_idx);
+        screen_offset = item_idx - cursor_offset;
+    }
 }
 
 void VerticalListMenu::resize(uint16_t height, uint16_t width)
