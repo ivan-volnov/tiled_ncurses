@@ -28,6 +28,7 @@ SOFTWARE.
 #include <locale.h>
 #include <mutex>
 #include <string_essentials/string_essentials.hpp>
+#include <cassert>
 
 
 
